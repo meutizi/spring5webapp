@@ -11,7 +11,9 @@ public class Book {
     private Long id;
     private String title;
     private String isbn;
-    private String publisher;
+    
+    @OneToOne
+    private Publisher publisher;
 
     @ManyToMany
     @JoinTable(name="author_books", joinColumns =@JoinColumn(name = "book_id"), inverseJoinColumns =@JoinColumn(name="author_id"))
@@ -19,13 +21,13 @@ public class Book {
 
     public Book() {}
 
-    public Book(String title, String isbn, String publisher) {
+    public Book(String title, String isbn, Publisher publisher) {
         this.title = title;
         this.isbn = isbn;
         this.publisher = publisher;
     }
 
-    public Book(String title, String isbn, String publisher, Set<Author> authors) {
+    public Book(String title, String isbn, Publisher publisher, Set<Author> authors) {
         this.title = title;
         this.isbn = isbn;
         this.publisher = publisher;
@@ -33,17 +35,42 @@ public class Book {
     }
 
     public Long getId() { return id; }
-    public void setId(Long firstName) { this.id = id; }    
+    public void setId(Long id) { this.id = id; }    
 
     public String getTitle() { return title; }
-    public void setTitle(String firstName) { this.title = title; }
+    public void setTitle(String title) { this.title = title; }
 
     public String getIsbn() { return isbn; }
-    public void setIsbn(String firstName) { this.isbn = isbn; }
+    public void setIsbn(String isbn) { this.isbn = isbn; }
 
-    public String getPublisher() { return publisher; }
-    public void SetPublisher(String publisher) { this.publisher = publisher; }
+    public Publisher getPublisher() { return publisher; }
+    public void SetPublisher(Publisher publisher) { this.publisher = publisher; }
 
     public Set<Author> getAuthors() { return authors; }
     public void setAuthors(Set<Author> books) { this.authors = authors; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Book book = (Book) o;
+        return id != null ? id.equals(book.id) : book.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", isbn='" + isbn + '\'' +
+                ", publisher='" + publisher.toString() + '\'' +
+                ", authors=" + authors +
+                '}';
+    }
 }
